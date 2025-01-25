@@ -83,42 +83,40 @@ async def handle_client(websocket):
                     timestamp = int(time.time())  # Current UNIX timestamp
 
                     # Query Firestore for the product
-                    product_ref = db.collection(COLLECTION_NAME).where(filter=("product_id", "==", product_id)).limit(1)
+                    product_ref = db.collection(COLLECTION_NAME).document(product_id)
                     products = product_ref.get()
-
-                    if products:
-                        for product in products:
-                            product_data = product.to_dict()
-                            current_bid = product_data.get("bid", 0)
-                            previous_bidder = product_data.get("bidder", None)
-                            product_document_ref = db.collection(COLLECTION_NAME).document(product.id)
-
+                    
+                    if products.exists:
+                        product_data = products.to_dict()
+                        current_bid = product_data.get("bid", 0)
+                        previous_bidder = product_data.get("bidder", None)
+                        # product_document_ref = db.collection(COLLECTION_NAME).document(product_data['product_id'])
                             # Prevent the seller from bidding on their own product
-                            if bidder == product_data["seller_id"]:
-                                print("Error: Seller cannot bid on their own product.")
-                                continue
+                        if bidder == product_data["seller_id"]:
+                            print("Error: Seller cannot bid on their own product.")
+                            continue
 
                             # Check if the new bid is higher than the current bid
-                            if new_bid > current_bid:
-                                # Update Firestore with the new bid
-                                product_document_ref.update({
-                                    "bid": new_bid,
-                                    "bidder": bidder,
-                                    "bid_timestamp": timestamp
-                                })
+                        if new_bid > current_bid:
+                            # Update Firestore with the new bid
+                            product_ref.update({
+                                "bid": new_bid,
+                                "bidder": bidder,
+                                "bid_timestamp": timestamp
+                            })
 
                                 # Prepare data to broadcast
-                                product_data["bid"] = new_bid
-                                product_data["bidder"] = bidder
-                                product_data["bid_timestamp"] = timestamp
-                                product_data["id"] = product.id
-                                product_data["previous_bidder"] = previous_bidder
+                            product_data["bid"] = new_bid
+                            product_data["bidder"] = bidder
+                            product_data["bid_timestamp"] = timestamp
+                            product_data["id"] = product_id
+                            product_data["previous_bidder"] = previous_bidder
 
                                 # Broadcast the updated product data to all clients
-                                await broadcast(json.dumps(product_data))
-                                print(f"Bid of {new_bid} placed on product {product_id}.")
-                            else:
-                                print(f"Error: Bid {new_bid} is not higher than the current bid {current_bid}.")
+                            await broadcast(json.dumps(product_data))
+                            print(f"Bid of {new_bid} placed on product {product_id}.")
+                        else:
+                            print(f"Error: Bid {new_bid} is not higher than the current bid {current_bid}.")
                     else:
                         print(f"Error: Product with ID {product_id} does not exist.")
             else:
