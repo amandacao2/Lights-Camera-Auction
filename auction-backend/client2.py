@@ -5,35 +5,35 @@ import time
 
 async def client():
     async with connect("ws://localhost:8765") as websocket:
-        # Example: Calling the create product action when the button is clicked
+        # Example: Creating a product
         new_item = await create_product(
             websocket,
             title="Item #3",
             description="This is item #3",
             starting_bid=50,
-            minimum_bid=50,  # Fixed the missing argument
             time_left=3600,
             reserve=60
         )
 
-        # Simulate some delay before placing a bid
-        await asyncio.sleep(3) # Simulate a delay before placing a bid
-        
-        # Call the place_bid action when the "Place Bid" button is clicked
-        await place_bid(websocket, product_id=new_item["product_id"], bidder_id="user234", current_bid=new_item["minimum_bid"])
+        if new_item:
+            # Simulate some delay before placing a bid
+            await asyncio.sleep(3)  # Simulate a delay before placing a bid
+            
+            # Call the place_bid action when the "Place Bid" button is clicked
+            await place_bid(websocket, product_id=new_item["product_id"], bidder_id="user234", current_bid=new_item["starting_bid"])
 
         try:
             while True:
                 message = await websocket.recv()
                 data = json.loads(message)
                 
-                # Handle the response for a product update (when the bid changes)
+                # Handle product updates from the server
                 if "action" in data and data["action"] == "product_update":
                     current_bid = data.get("bid", 0)
                     current_bidder = data.get("bidder", None)
                     
                     # Check if the current client is outbid and notify
-                    if current_bidder != "user456":
+                    if current_bidder != "user234":
                         print(f"Outbid! The current highest bid for {data['title']} is {current_bid} by {current_bidder}.")
                     else:
                         print(f"You're currently the highest bidder for {data['title']} at {current_bid}.")
@@ -43,25 +43,45 @@ async def client():
             print(f"Connection closed: {e}")
 
 
-# Create product with input from frontend
-async def create_product(websocket, title, description, minimum_bid, starting_bid, time_left, reserve):
+# Create a new product
+async def create_product(websocket, title, description, starting_bid, time_left, reserve):
     new_item = {
-        "action": "create_product",  # Action to create a new product
-        "seller_id": "user234",  # Seller's ID (can be dynamic)
-        "product_id": f"product{str(int(time.time()))}",  # Ensure unique product ID (using timestamp)
+        "action": "create_product",
+        "seller_id": "user234",  # Dynamic seller ID
         "title": title,
         "description": description,
-        "image_url": "https://example.com/item3.jpg",  # Example image URL (can be dynamic)
-        "minimum_bid": minimum_bid,
+        "image_url": "https://example.com/item3.jpg",  # Example URL
         "starting_bid": starting_bid,
         "time_left": time_left,
-        "reserve": reserve
+        "reserve": reserve,
     }
 
     print(f"Attempting to create product: {new_item}")
     await websocket.send(json.dumps(new_item))
 
-    return new_item  # Return the product ID for use in the next steps
+    while True:
+        # Wait for a valid response
+        server_response = await websocket.recv()
+        response = json.loads(server_response)
+
+        # Debugging: Print the full server response
+        print(f"Server response: {response}")
+
+        # Check if the response is a list (which it is)
+        if isinstance(response, dict) and "product" in response:
+            # Look for the newly created product by matching its title or other attributes
+            # for product in response:
+            product = response["product"]
+            if product["title"] == title and product["seller_id"] == "user234":
+                print(f"Product created with ID: {product['product_id']}")
+                return product
+
+        # If we receive a product that matches the newly created one, return it
+        print("Waiting for the correct product response...")
+
+    print("Error: Failed to receive the created product response.")
+    return None
+
 
 
 # Sending a bid from the client
@@ -78,7 +98,7 @@ async def place_bid(websocket, product_id, bidder_id, current_bid):
     print(f"Placed bid of {new_bid} on product {product_id}")
 
 
-
 if __name__ == "__main__":
     print("Client2 started.")
     asyncio.run(client())
+

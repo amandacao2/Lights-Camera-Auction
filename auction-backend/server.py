@@ -51,15 +51,13 @@ async def handle_client(websocket):
                     seller_id = new_data.get("seller_id")  # Ensure seller_id is sent
                     if seller_id:
                         product_data = {
-                            "product_id": new_data["product_id"],
                             "title": new_data["title"],
                             "description": new_data["description"],
                             "image_url": new_data["image_url"],
-                            "minimum_bid": new_data["minimum_bid"],
                             "starting_bid": new_data["starting_bid"],
                             "time_left": new_data["time_left"],
                             "reserve": new_data["reserve"],
-                            "bid": new_data["starting_bid"],  # Initial bid equals starting_bid
+                            "bid": 0,   # Initial bid equals starting_bid
                             "bidder": None,
                             "bid_timestamp": None,
                             "created_at": int(time.time()),
@@ -69,10 +67,10 @@ async def handle_client(websocket):
 
                         # Add the product to Firestore
                         _, doc_ref = db.collection(COLLECTION_NAME).add(product_data)
-                        product_data["id"] = doc_ref.id  # Include Firestore's document ID
+                        product_data["product_id"] = doc_ref.id  # Include Firestore's document ID
 
                         # Broadcast the new product to all clients
-                        await broadcast(json.dumps(product_data))
+                        await broadcast(json.dumps({"action": "create_product", "product": product_data}))
                         print(f"Product {product_data['product_id']} created successfully.")
                     else:
                         print("Error: Missing seller_id in product creation request.")
