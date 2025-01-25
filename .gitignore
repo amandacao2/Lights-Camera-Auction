@@ -1,3 +1,9 @@
 # Ignore the firebaseConfig.env file
 auction-backend/firebaseConfig.env
 auction-backend/SDK_Key_Firebase.json
+auction-backend/SDK_KEY_Firebase.json
+auction-backend/node_modules
+auction-backend/.env
+auction-backend/email.py
+auction-backend/database-structure.txt
+auction-backend/data.json
