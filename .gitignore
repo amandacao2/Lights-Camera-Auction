@@ -1,0 +1,3 @@
+# Ignore the firebaseConfig.env file
+auction-backend/firebaseConfig.env
+auction-backend/SDK_Key_Firebase.json
