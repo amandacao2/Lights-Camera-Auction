@@ -34,6 +34,14 @@ body {
   padding: 0 5rem; /* Add padding for spacing */
 }
 
+.logo {
+  width: 125px;
+  height: 100px;
+  margin-top: 10px;
+  margin-right: -210px;
+}
+
+
 .spline-viewer {
   width: 50%; /* Occupy half the screen width */
   height: 100%;
@@ -91,7 +99,7 @@ body {
 
 .text1 {
   font-size: 5rem;
-  background: black;
+  background: linear-gradient(45deg, #8ea0d4, #153594, #002bab);
   margin-right: 5rem;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

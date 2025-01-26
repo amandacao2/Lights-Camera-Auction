@@ -1,0 +1,104 @@
+/* Directory Page */
+.directory-page {
+    display: flex;
+    flex-direction: row; /* Arrange content horizontally */
+    align-items: flex-start; /* Align to the top */
+    padding: 2rem 0;
+    justify-content: space-between; /* Create space between title and product list */
+    overflow-y: scroll; /* Enable vertical scrolling */
+    height: 100vh; /* Ensure it takes the full height */
+}
+
+.spline-logo {
+    width: 500px;
+    height: 400px;
+    margin-left: -50px;
+    scale: 0.9;
+}
+/* Directory Header */
+.directory-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center title horizontally */
+    justify-content: center; /* Center title vertically */
+    text-align: left;
+    flex-basis: 30%; /* Take up 30% of the available space */
+}
+
+.directory-title {
+    font-size: 6rem; /* Adjust size as needed */
+    background: linear-gradient(45deg, #64656a, #000000, #5b5c5e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0; /* Remove margin */
+    padding-top: 130px;
+    padding-bottom: 15px;
+    padding-left: 90px;
+}
+
+/* Product Images Container */
+.directory-main {
+    flex-basis: 70%; /* Take up the remaining 70% */
+    padding-left: 2rem;
+    height: 100vh; /* Ensure it takes the full height */
+}
+
+/* Hide scrollbar but keep scrolling */
+.product-images-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 images per row */
+    gap: 1rem;
+    width: max-content; /* Adjust width to allow horizontal scroll */
+    max-width: 100%;
+    padding-top: 400px;
+    margin-left: 150px;
+    
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.product-images-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+}
+
+/* Hide scrollbar for Firefox */
+.product-images-container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+
+/* Product Image Cards */
+.product-image-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 300px; /* Adjust height to fit the spline viewer */
+    width: 400px;
+}
+
+.product-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+}
+
+.product-image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    color: black;
+    font-size: 1.2rem;
+    text-align: left;
+    transition: background 0.3s ease;
+}
+
+.product-image-card:hover .product-image-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+}
