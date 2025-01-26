@@ -81,7 +81,7 @@ async def handle_client(websocket):
                     new_bid = new_data["bid_amount"]
                     bidder = new_data["bidder"]
                     timestamp = int(time.time())  # Current UNIX timestamp
-
+                    
                     # Query Firestore for the product
                     product_ref = db.collection(COLLECTION_NAME).document(product_id)
                     products = product_ref.get()
@@ -127,10 +127,137 @@ async def handle_client(websocket):
     finally:
         connected_clients.remove(websocket)
 
+
+async def broadcast_to_bidder(bidder, message):
+    """
+    Broadcast a message to the specific bidder.
+    This function can be used to send a win notification to the bidder.
+    """
+    for client in connected_clients:
+        try:
+            # Check if the client's bidder ID matches
+            if client.id == bidder:
+                await client.send(json.dumps(message))
+                print(f"Notified {bidder} of win for item {message['product_id']}.")
+        except Exception as e:
+            print(f"Error sending notification to {bidder}: {e}")
+
+
+async def fetch_expired_items():
+    print("Checking for expired items...")
+    now = time.time()
+    products_ref = db.collection(COLLECTION_NAME)
+    products = products_ref.stream()
+    expired_items = []
+
+    for product in products:
+        product_data = product.to_dict()
+        product_id = product.id
+        created_at = product_data.get("created_at")
+        countdown_timer = product_data.get("time_left")
+        reserve_price = product_data.get("reserve", 0)
+        bid = product_data.get("bid", 0)
+        bidder = product_data.get("bidder", None)
+
+        expiration_time = created_at + countdown_timer
+
+        # Check if the product is expired
+        if now >= expiration_time and product_data.get("status") == "active":
+            # If the product expired and there was a valid bid
+            if bid >= reserve_price and bidder:
+                winner_notification = {
+                    "action": "win_item",
+                    "product_id": product_id,
+                    "price": bid,
+                    "description": product_data.get("description"),
+                    "message": "Congratulations! You have won the item."
+                }
+                # Notify the winning bidder
+                await broadcast(json.stringify(winner_notification))
+                
+            
+            # If the product expired with no bids
+            elif bid == 0:
+                print("NO BIDS FOUND AT ALL")
+                frontend_notification = {
+                    "action": "delete_item",
+                    "product_id": product_id,
+                    "message": "This item expired with no bids and has been removed."
+                }
+                # Notify the frontend to delete the item
+                await broadcast(json.dumps(frontend_notification))
+
+            # Add the expired item to the list (useful for tracking or logging)
+            expired_items.append({**product_data, "id": product_id})
+            print(f"Expired items: {expired_items}")
+            # Mark the product as expired in Firestore
+            product_data["status"] = "expired"
+            product_data["time_left"] = 0
+
+            # Update the product status in Firestore
+            db.collection(COLLECTION_NAME).document(product_id).set(product_data)
+
+            # Remove the expired item from Firestore
+            db.collection(COLLECTION_NAME).document(product_id).delete()
+        else:
+            print(f"Product expired time: {expiration_time} - Current time: {now}")
+
+    return expired_items
+
+
+
+# async def update_time_left():
+#     while True:
+#         products_ref = db.collection(COLLECTION_NAME)
+#         products = products_ref.stream()
+#         now = time.time()
+
+#         for product in products:
+#             product_data = product.to_dict()
+#             product_id = product.id
+#             countdown_timer = product_data.get("time_left")
+#             created_at = product_data.get("created_at")
+
+#             if product_data.get("status") == "active":
+#                 expiration_time = created_at + countdown_timer
+#                 time_left = int((expiration_time - now))
+
+#                 if time_left <= 0:
+#                     product_data["status"] = "expired"
+#                     product_data["time_left"] = 0  # Stop countdown when expired
+#                     # Delete expired item from Firestore
+#                     db.collection(COLLECTION_NAME).document(product_id).delete()  # Remove expired product
+#                 else:
+#                     product_data["time_left"] = time_left
+
+#                 # Check if the product exists before updating
+#                 product_ref = db.collection(COLLECTION_NAME).document(product_id)
+#                 product_snapshot = product_ref.get()
+
+#                 if product_snapshot.exists:
+#                     product_ref.update({
+#                         "time_left": product_data["time_left"],
+#                         "status": product_data["status"]
+#                     })
+#                     # Broadcast time left update to clients
+#                     product_data["id"] = product_id  # Ensure ID is included in the broadcast
+#                     await broadcast(json.dumps(product_data))
+#                 else:
+#                     print(f"Product with ID {product_id} does not exist anymore.")
+
+#         await asyncio.sleep(8)
+
+async def periodic_fetch_expired():
+    while True:
+        await fetch_expired_items()
+        await asyncio.sleep(5)
 # Main function to start the WebSocket server
+
 async def main():
     async with serve(handle_client, "localhost", 8765):
         print("Server started.")
+        asyncio.create_task(periodic_fetch_expired())   
+        # asyncio.create_task(update_time_left())
         await asyncio.Future()  # Run forever
 
 if __name__ == "__main__":

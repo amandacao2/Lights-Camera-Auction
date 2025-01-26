@@ -20,7 +20,7 @@ async def client():
             await asyncio.sleep(3)  # Simulate a delay before placing a bid
             
             # Call the place_bid action when the "Place Bid" button is clicked
-            await place_bid(websocket, product_id=new_item["product_id"], bidder_id="user234", current_bid=new_item["starting_bid"])
+            await place_bid(websocket, product_id=new_item["product_id"], bidder_id="user2345", current_bid=new_item["starting_bid"])
 
         try:
             while True:
@@ -31,6 +31,7 @@ async def client():
                 if "action" in data and data["action"] == "product_update":
                     current_bid = data.get("bid", 0)
                     current_bidder = data.get("bidder", None)
+                    time_left = data.get("time_left", 0)
                     
                     # Check if the current client is outbid and notify
                     if current_bidder != "user234":
@@ -38,6 +39,7 @@ async def client():
                     else:
                         print(f"You're currently the highest bidder for {data['title']} at {current_bid}.")
                 
+                print(f"Time left for {data['title']}: {time_left} seconds.")
                 print("Received:", message)
         except Exception as e:
             print(f"Connection closed: {e}")
@@ -72,7 +74,7 @@ async def create_product(websocket, title, description, starting_bid, time_left,
             # Look for the newly created product by matching its title or other attributes
             # for product in response:
             product = response["product"]
-            if product["title"] == title and product["seller_id"] == "user234":
+            if product["title"] == title and product["seller_id"] == "user23544":
                 print(f"Product created with ID: {product['product_id']}")
                 return product
 
@@ -91,11 +93,11 @@ async def place_bid(websocket, product_id, bidder_id, current_bid):
         "action": "place_bid",
         "product_id": product_id,
         "bid_amount": new_bid,
-        "bidder": bidder_id,
+        "bidder": bidder_id
     }
     print(f"Attempting to place bid: {bid_data}")
     await websocket.send(json.dumps(bid_data))
-    print(f"Placed bid of {new_bid} on product {product_id}")
+    print(f"Placed bid of {new_bid} on product {product_id}. ")
 
 
 if __name__ == "__main__":
