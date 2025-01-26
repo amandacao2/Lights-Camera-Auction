@@ -11,13 +11,13 @@ const Landing = () => {
     <div>
       {/* Navigation Bar */}
       <nav className="navbar">
-        <h3 className="logo">Logo</h3>
+      <img src="logo.png" width="100" height="65"/>
         <ul className="menu">
           <li>Home</li>
           <li>About</li>
           <li>Start Bidding</li>
         </ul>
-        <button className="btn1" onClick={handleLoginClick  }>Login</button>
+        <button className="btn1" onClick={handleLoginClick}>Login</button>
       </nav>
 
       {/* Main Content */}
