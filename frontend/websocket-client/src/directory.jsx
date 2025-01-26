@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import useWebSocket from 'react-use-websocket';
+import {Link} from 'react-router-dom';
 
 const Directory = () => {
     const [products, setProducts] = useState([]);
-    const {sendMessag, lastMessage, readyState} = useWebSocket('ws://localhost:8765', {
+    const {sendMessage, lastMessage, readyState} = useWebSocket('ws://localhost:8765', {
         onOpen: () => console.log('opened'),
         onClose: () => console.log('closed'),
         onError: (event) => console.log('error', event),
@@ -34,7 +35,25 @@ const Directory = () => {
                 const updatedProducts = getActualTimeLeft(newProduct);
                 setProducts(updatedProducts);
             } else {
-                setProducts((prevProduct) => [...prevProduct, ...newProduct]);
+                if (newProduct.hasOwnProperty('product')) {
+                    const defNewProduct = newProduct.product;
+                    setProducts((prevProduct) => [...prevProduct, defNewProduct]);
+                }
+                else {
+                    setProducts((prevProducts) => {
+                        const updatedProducts = prevProducts.map((product) => {
+                            if (product.id === newProduct.id) {
+                                return {...product, bid: newProduct.bid};
+                            } else {
+                                return product;
+                            }
+                        });
+                        return updatedProducts;
+                    });
+                    if (newProduct.previous_bidder == localStorage.getItem("uid")) {
+                        alert("You have been outbid on " + newProduct.title);
+                    }
+                }
             }
         }
     }, [lastMessage]);
@@ -61,20 +80,13 @@ const Directory = () => {
 
     return (
         <div className='App'>
-            {/* <form onSubmit={handleSubmit}>
-                <input type="text" value={newProduct.title} onChange={(e) => setNewProduct({...newProduct, title: e.target.value})} placeholder="Product Title" />
-                <input type="text" value={newProduct.description} onChange={(e) => setNewProduct({...newProduct, description: e.target.value})} placeholder="Product Description" />
-                <input type="number" value={newProduct['starting_bid']} onChange={(e) => setNewProduct({...newProduct, 'starting_bid': e.target.value})} placeholder="Starting Bid" />
-                <input type="number" value={newProduct['time_left']} onChange={(e) => setNewProduct({...newProduct, 'time_left': e.target.value})} placeholder="Countdown Timer" />
-                <input type="number" value={newProduct['reserve']} onChange={(e) => setNewProduct({...newProduct, 'reserve': e.target.value})} placeholder="Reserve Bid" />
-                <button type="submit">Add Product</button>
-            </form> */}
-
             <h1>Product List</h1>
             <ul>
                 {products.map((product) => (
-                    <li key={product.product_id}>
-                        {product.title} - {product.description} - ${product['starting_bid']} - {formatTime(product['time_left'])}s - {product['bid']}
+                    <li key={product.id}>
+                        <Link to={`/product/${product.id}`} state={product}>
+                            {product.title} - {product.description} - ${product['starting_bid']} - {formatTime(product['time_left'])}s - {product['bid']}
+                        </Link>
                     </li>
                 ))}
             </ul>

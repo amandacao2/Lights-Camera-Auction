@@ -116,7 +116,11 @@ async def handle_client(websocket):
                             await broadcast(json.dumps(product_data))
                             print(f"Bid of {new_bid} placed on product {product_id}.")
                         else:
-                            failure_json = {"failure_message": "Failure"}
+                            failure_json = {
+                                "failure_message": "Failure",
+                                "bidder": bidder,
+                                "id": product_id,
+                                }
                             await broadcast(json.dumps(failure_json))
                             print(f"Error: Bid {new_bid} is not higher than the current bid {current_bid}.")
                     else:

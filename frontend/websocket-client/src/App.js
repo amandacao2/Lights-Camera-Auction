@@ -5,6 +5,7 @@ import Login from "./login";
 import Directory from "./directory";
 import Admin from "./admin";
 import Landing from "./landing";
+import Product from './Product';
 // import "./landing.css";
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/directory" element={<Directory />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/product/:productId" element={<Product />} />
       </Routes>
     </Router>
   );
