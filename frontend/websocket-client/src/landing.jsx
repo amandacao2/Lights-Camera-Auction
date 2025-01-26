@@ -1,7 +1,12 @@
 import React from "react";
 import "./landing.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Landing = () => {
+  const navigate = useNavigate(); // Initialize navigate
+  const handleLoginClick = () => {
+    navigate("/login"); // Navigate to the login page
+  };
   return (
     <div>
       {/* Navigation Bar */}
@@ -12,7 +17,7 @@ const Landing = () => {
           <li>About</li>
           <li>Start Bidding</li>
         </ul>
-        <button className="btn1">Login</button>
+        <button className="btn1" onClick={handleLoginClick}>Login</button>
       </nav>
 
       {/* Main Content */}
