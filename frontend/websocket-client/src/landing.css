@@ -26,6 +26,23 @@ body {
   transform: scale(1.2) translateX(-20%);
 }
 
+.main-container {
+  display: flex; /* Side-by-side layout */
+  align-items: center; /* Vertically align items */
+  justify-content: space-between; /* Space out items */
+  height: calc(100vh - 100px); /* Full viewport height minus navbar */
+  padding: 0 5rem; /* Add padding for spacing */
+}
+
+.spline-viewer {
+  width: 50%; /* Occupy half the screen width */
+  height: 100%;
+}
+
+.text-container {
+  width: 50%; /* Occupy half the screen width */
+  text-align: right;
+}
 /* Navbar */
 .navbar {
   display: flex;
