@@ -37,9 +37,24 @@ const Directory = () => {
             } else {
                 if (newProduct.hasOwnProperty('product')) {
                     const defNewProduct = newProduct.product;
+                    // defNewProduct.id = defNewProduct.product_id;
                     setProducts((prevProduct) => [...prevProduct, defNewProduct]);
                 }
                 else {
+                    if (newProduct.hasOwnProperty('action')) {
+                        if (newProduct.action === 'delete_item') {
+                            console.log('deletting')
+                            setProducts((prevProducts) => prevProducts.filter((product) => (product.id !== newProduct.product_id) && (product.product_id !== newProduct.product_id)));
+                            console.log(products);
+                        }
+                        else if(newProduct.action === 'win_item') {
+                            if (newProduct.bidder === localStorage.getItem("uid")) {
+                                alert("You have won " + newProduct.title  + " for " + newProduct.price);
+                            }
+                            setProducts((prevProducts) => prevProducts.filter((product) => (product.id !== newProduct.product_id) && (product.product_id !== newProduct.product_id)));
+                            console.log(products);
+                        }
+                    }
                     setProducts((prevProducts) => {
                         const updatedProducts = prevProducts.map((product) => {
                             if (product.id === newProduct.id) {

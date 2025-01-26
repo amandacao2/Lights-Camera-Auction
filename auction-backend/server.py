@@ -164,6 +164,7 @@ async def fetch_expired_items():
         reserve_price = product_data.get("reserve", 0)
         bid = product_data.get("bid", 0)
         bidder = product_data.get("bidder", None)
+        title = product_data.get("title", "Unknown item")
 
         expiration_time = created_at + countdown_timer
 
@@ -176,10 +177,12 @@ async def fetch_expired_items():
                     "product_id": product_id,
                     "price": bid,
                     "description": product_data.get("description"),
-                    "message": "Congratulations! You have won the item."
+                    "message": "Congratulations! You have won the item.",
+                    "bidder": bidder,
+                    "title": title
                 }
                 # Notify the winning bidder
-                await broadcast(json.stringify(winner_notification))
+                await broadcast(json.dumps(winner_notification))
                 
             
             # If the product expired with no bids

@@ -24,6 +24,7 @@ function Admin() {
         "image_url": "https://example.com/item3.jpg",
         "starting_bid": parseFloat(newProduct['starting_bid']),
         "time_left": parseInt(newProduct['time_left']),
+        "reserve": parseFloat(newProduct['reserve'])
       }
       if (readyState === 1) {
         console.log("READY TO SEND");
