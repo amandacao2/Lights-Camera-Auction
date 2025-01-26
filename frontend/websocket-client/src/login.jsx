@@ -58,7 +58,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <p style={{ textAlign: "center", marginTop: "1rem" }}>
+        <p style={{ textAlign: "left", marginTop: "1rem", marginLeft: "3rem" }}>
           Don't have an account?{" "}
           <Link to="/signup" style={{ color: "#153594", textDecoration: "underline" }}>
             Sign up here

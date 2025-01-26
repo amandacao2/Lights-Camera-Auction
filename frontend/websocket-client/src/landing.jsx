@@ -17,7 +17,7 @@ const Landing = () => {
           <li>About</li>
           <li>Start Bidding</li>
         </ul>
-        <button className="btn1" onClick={handleLoginClick}>Login</button>
+        <button className="btn1" onClick={handleLoginClick  }>Login</button>
       </nav>
 
       {/* Main Content */}

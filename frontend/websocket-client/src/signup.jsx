@@ -52,7 +52,7 @@ const Signup = () => {
             Signup
           </button>
         </form>
-        <p style={{ textAlign: "center", marginTop: "1rem" }}>
+        <p style={{ textAlign: "left", marginTop: "1rem", marginLeft: "3.5rem" }}>
           Already have an account?{" "}
           <Link to="/login" style={{ color: "#153594", textDecoration: "underline" }}>
             Login here
