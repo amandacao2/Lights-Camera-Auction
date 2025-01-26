@@ -1,7 +1,57 @@
-.container{
-    display: flex;
-    justify-content: center;
-    align-items: center;  
-    margin-top: 10ch  
-}
-
+    /* Flex Container for Login Page */
+    .login-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: 100vh;
+        padding: 0 5rem;
+    }
+    
+    /* Title Styling */
+    .login-title {
+        font-size: 10rem;
+        background: linear-gradient(45deg, #8ea0d4, #153594, #002bab);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-left: 2rem;
+    }
+    
+    /* Form Container Styling */
+    .login-form-container {
+        width: 40%;
+    }
+    
+    /* Login Form Styling */
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem; /* Space between form elements */
+    }
+    
+    .login-form label {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .login-form input {
+        padding: 1rem;
+        font-size: 1.5rem;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+    }
+    
+    .btn-submit {
+        padding: 1rem;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(45deg, #4966bb, #153594, #002bab);
+        color: white;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        transform: scale(1.1);
+    }
+    
