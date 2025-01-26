@@ -62,7 +62,8 @@ async def handle_client(websocket):
                             "bid_timestamp": None,
                             "created_at": int(time.time()),
                             "status": "active",
-                            "seller_id": seller_id  # Track which seller added the product
+                            "seller_id": seller_id, # Track which seller added the product
+                            "spline_url": new_data["spline_url"]
                         }
 
                         # Add the product to Firestore

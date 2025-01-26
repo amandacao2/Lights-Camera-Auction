@@ -1,0 +1,58 @@
+    /* Flex Container for Login Page */
+    .admin-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: 100vh;
+        padding: 0 5rem;
+    }
+    
+    /* Title Styling */
+    .admin-title {
+        font-size: 10rem;
+        background: linear-gradient(45deg, #64656a, #000000, #5b5c5e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-left: 2rem;
+    }
+    
+    /* Form Container Styling */
+    .admin-form-container {
+        width: 40%;
+    }
+    
+    /* Login Form Styling */
+    .admin-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; /* Space between form elements */
+    }
+    
+    .admin-form label {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .admin-form input {
+        padding: 0.75rem;
+        font-size: 1.25rem;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+    }
+    
+    .btn-submit {
+        padding: 1rem;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(45deg, #64656a, #000000, #5b5c5e);
+        color: white;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        transform: scale(1.1);
+        background: linear-gradient(45deg, #64656a, #000000, #5b5c5e);
+    }
+    
