@@ -196,6 +196,15 @@ async def fetch_expired_items():
                 }
                 # Notify the frontend to delete the item
                 await broadcast(json.dumps(frontend_notification))
+            else:
+                print("BID DID NOT MEET RESERVE PRICE")
+                frontend_notification = {
+                    "action": "delete_item",
+                    "product_id": product_id,
+                    "message": "Reserve",
+                    "title": title
+                }
+                await broadcast(json.dumps(frontend_notification))
 
             # Add the expired item to the list (useful for tracking or logging)
             expired_items.append({**product_data, "id": product_id})
@@ -211,6 +220,7 @@ async def fetch_expired_items():
             db.collection(COLLECTION_NAME).document(product_id).delete()
         else:
             print(f"Product expired time: {expiration_time} - Current time: {now}")
+            
 
     return expired_items
 

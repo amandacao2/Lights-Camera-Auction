@@ -43,6 +43,9 @@ const Directory = () => {
                 else {
                     if (newProduct.hasOwnProperty('action')) {
                         if (newProduct.action === 'delete_item') {
+                            if (newProduct.message === 'Reserve') {
+                                alert("Reserve bid not met for " + newProduct.title);
+                            }
                             console.log('deletting')
                             setProducts((prevProducts) => prevProducts.filter((product) => (product.id !== newProduct.product_id) && (product.product_id !== newProduct.product_id)));
                             console.log(products);
