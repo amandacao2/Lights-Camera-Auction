@@ -26,6 +26,7 @@ const Login = () => {
         alert("Please verify your email first.");
         return;
       }
+      localStorage.setItem("uid", user.uid);
       alert("Login successful!");
       navigate("/directory");
     } catch (error) {
