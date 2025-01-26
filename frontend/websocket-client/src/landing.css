@@ -74,7 +74,7 @@ body {
   padding: 10px 40px;
   border-radius: 18px;
   border: none;
-  background: linear-gradient(45deg, #4966bb, #153594, #002bab);
+  background: linear-gradient(45deg, #64656a, #000000, #5b5c5e);
   transition: 0.4s;
 }
 
@@ -140,7 +140,7 @@ body {
 .btn-submit {
   width: 100%;
   padding: 0.7rem;
-  background: linear-gradient(45deg, #4966bb, #153594, #002bab);
+  background: linear-gradient(45deg, #64656a, #000000, #5b5c5e);
   color: white;
   border: none;
   border-radius: 4px;
@@ -149,7 +149,7 @@ body {
 }
 
 .btn-submit:hover {
-  background: linear-gradient(45deg, #153594, #002bab);
+  background: linear-gradient(45deg, #64656a, #000000);
   transform: scale(1.05); /* Slightly enlarge button on hover */
 }
 

@@ -3,6 +3,7 @@ import firebase, { FIREBASE_AUTH } from "./firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import "./login-signup.css"; // Use the shared CSS
+import "./landing.css";
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
@@ -35,7 +36,10 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h1 className="login-title">Login</h1>
+      <div>
+      <h1 className="login-title" style={{marginLeft: "5rem" }}>Login</h1>
+      <spline-viewer url="https://prod.spline.design/hlGWKuhbw7Xt-1cC/scene.splinecode"></spline-viewer>
+      </div>
       <div className="login-form-container">
         <form className="login-form" onSubmit={handleLogin}>
           <label htmlFor="email">Email:</label>

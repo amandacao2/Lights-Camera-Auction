@@ -1,5 +1,6 @@
 import React from "react";
 import "./login-signup.css";
+import "./landing.css";
 import firebase, { FIREBASE_AUTH } from "./firebase-config";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
@@ -29,7 +30,10 @@ const Signup = () => {
 
   return (
     <div className="login-container">
-      <h1 className="login-title">Sign<br/>Up</h1>
+      <div>
+      <h1 className="signup-title">Sign<br/>Up</h1>
+      <spline-viewer url="https://prod.spline.design/hlGWKuhbw7Xt-1cC/scene.splinecode"></spline-viewer>
+      </div>
       <div className="login-form-container">
         <form className="login-form" onSubmit={handleSignup}>
           <label htmlFor="email">Email:</label>

@@ -11,7 +11,7 @@ const Landing = () => {
     <div>
       {/* Navigation Bar */}
       <nav className="navbar">
-      <img src="logo.png" width="100" height="65"/>
+      <img src="logo.png" width="80" height="45"/>
         <ul className="menu">
           <li>Home</li>
           <li>About</li>
