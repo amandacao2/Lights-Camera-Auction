@@ -91,7 +91,7 @@ body {
 
 .text1 {
   font-size: 5rem;
-  background: linear-gradient(45deg, #8ea0d4, #153594, #002bab);
+  background: black;
   margin-right: 5rem;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
