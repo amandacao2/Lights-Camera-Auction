@@ -1,5 +1,6 @@
 Our inspiration was to make an online silent auction that resembled an in-person one. With 3D images, you can truly see the product in all angles. To accomplish the real time updates, we used web sockets to broadcast all events to the clients.
 
+More detail on devpost: https://devpost.com/software/lights-camera-auction?ref_content=my-projects-tab&ref_feature=my_projects
 
 
 
